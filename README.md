@@ -19,3 +19,13 @@ Website to allot rooms in a hostel to students
 - [ ] Implement allocation logic
 - [ ] Improve frontend
 - [ ] Add additional features
+
+
+## Contributors
+- [Chirag Thakur](https://github.com/chirag11032000)
+- [Kumar Kartikay](https://github.com/kartikay26)
+- [Digvijay Janartha](https://github.com/digu-007)
+- [Lakshay Gupta](https://github.com/lakshaygpt28)
+- [Rohit](https://github.com/rohit645)
+- [Rohit Sharma](https://github.com/rohit645)
+- [Mukul Koundal](https://github.com/rohit645)
