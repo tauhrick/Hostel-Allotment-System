@@ -66,19 +66,23 @@ def register():
         return render_template("auth/register.html")
 
 
+# To-do:
+# - web-scraping for cgpi, name
 @bp.route("/register_student/", methods = ("GET", "POST"))
 @logged_out_required
 def register_student():
     if request.method == "POST":
-        name = request.form["name"]
         roll_number = request.form["password"]
+        name = "foo"
+        email_id = str(roll_number) + "@nith.ac.in"
         phone_number = request.form["phone_number"]
+        cgpi = 0.00
+        year = request.form["year"]
         password = generate_password_hash(request.form["password"])
         if roll_number_taken(roll_number):
             print("Roll number: {} already registered.".format(roll_number))
             return redirect(url_for("auth.register_student"))
         else:
-            add_student(name, roll_number, phone_number, password)
             print("Student: {} registered.".format(name))
             return redirect(url_for("index"))
     else:

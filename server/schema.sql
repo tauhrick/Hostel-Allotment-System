@@ -12,13 +12,13 @@ CREATE TABLE IF NOT EXISTS students (
     name TEXT,
     email_id TEXT UNIQUE,
     phone_number TEXT,
-    password TEXT,
     cgpi FLOAT,
     year INTEGER
+    password TEXT,
 );
 
 CREATE TABLE IF NOT EXISTS admins (
-    username TEXT UNIQUE,
+    user_name TEXT PRIMARY KEY,
     password TEXT
 );
 

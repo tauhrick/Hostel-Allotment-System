@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}Login Admin{% endblock %}
+
+{% block content %}
+    <br><br>
+    <center><h1>Login Admin</h1></center>
+    <br>
+    <h3>Please fill out the following information:</h3>
+    <form method="POST">
+        <i>Username:</i> <input type="text" name="user_name" required><br>
+        <i>Password:</i> <input type="password" name="password" required><br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
