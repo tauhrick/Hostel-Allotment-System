@@ -1,5 +1,3 @@
-.open hostel.db
-
 DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS admins;
 DROP TABLE IF EXISTS teams;
@@ -10,23 +8,23 @@ DROP TABLE IF EXISTS choices;
 
 
 CREATE TABLE IF NOT EXISTS students (
-	roll_number INTEGER PRIMARY KEY,
-	name TEXT,
-	email_id TEXT UNIQUE,
-	phone_number TEXT,
-	password TEXT,
+    roll_number INTEGER PRIMARY KEY,
+    name TEXT,
+    email_id TEXT UNIQUE,
+    phone_number TEXT,
+    password TEXT,
     cgpi FLOAT,
     year INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS admins (
-	username TEXT UNIQUE,
-	password TEXT
+    username TEXT UNIQUE,
+    password TEXT
 );
 
 CREATE TABLE IF NOT EXISTS teams (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	size INTEGER,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    size INTEGER,
     is_lock BOOLEAN
 );
 
