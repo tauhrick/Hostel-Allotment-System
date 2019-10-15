@@ -1,6 +1,7 @@
 import functools
 from flask import Blueprint, redirect, url_for, render_template, flash, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
+from . import scrape
 
 bp = Blueprint("auth", __name__)
 
@@ -68,6 +69,10 @@ def register():
 
 # To-do:
 # - web-scraping for cgpi, name
+data = {}
+data = scrape.extract()
+print(data)
+
 @bp.route("/register_student/", methods = ("GET", "POST"))
 @logged_out_required
 def register_student():
