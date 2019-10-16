@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS choices;
 
 
 CREATE TABLE IF NOT EXISTS students (
-    roll_number INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
+    roll_number INTEGER UNIQUE,
     name TEXT,
     email_id TEXT UNIQUE,
     phone_number TEXT,
