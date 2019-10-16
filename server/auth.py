@@ -71,7 +71,7 @@ def register():
 # - web-scraping for cgpi, name
 data = {}
 data = scrape.extract()
-print(data)
+# print(data)
 
 @bp.route("/register_student/", methods = ("GET", "POST"))
 @logged_out_required

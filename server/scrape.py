@@ -21,6 +21,7 @@ def extract():
         gpa = (soup.select_one("#"+fin+str(cnt+5))).text.strip()
         cnt = cnt + 6
         dict[Roll_no] = {"Name": name, "CGPA": gpa}
+    print(dict)
     return dict
 
 extract()
