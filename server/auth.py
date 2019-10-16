@@ -2,6 +2,7 @@ import functools
 from server import app, db
 from flask import redirect, url_for, render_template, flash, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
+from . import scrape
 
 def login_admin_required(view):
     @functools.wraps(view)
