@@ -1,8 +1,7 @@
 import functools
-from flask import Blueprint, redirect, url_for, render_template, flash, request, session
+from server import app, db
+from flask import redirect, url_for, render_template, flash, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
-
-bp = Blueprint("auth", __name__)
 
 def login_admin_required(view):
     @functools.wraps(view)
@@ -54,26 +53,30 @@ def logged_out_required(view):
     return wrapped_view
 
 
-@bp.route("/register/", methods = ("GET", "POST"))
+@app.route("/register/", methods = ("GET", "POST"))
 @logged_out_required
 def register():
     if request.method == "POST":
         if request.form["choice"] == "Student":
-            return redirect(url_for("auth.register_student"))
+            return redirect(url_for("register_student"))
         else:
-            return redirect(url_for("auth.register_admin"))
+            return redirect(url_for("register_admin"))
     else:
         return render_template("auth/register.html")
 
 
 # To-do:
 # - web-scraping for cgpi, name
-@bp.route("/register_student/", methods = ("GET", "POST"))
+@app.route("/register_student/", methods = ("GET", "POST"))
 @logged_out_required
 def register_student():
     if request.method == "POST":
-        roll_number = request.form["password"]
-        name = "foo"
+        roll_number_1 = request.form["roll_number_1"]
+        roll_number_2 = request.form["roll_number_2"]
+        roll_number_3 = request.form["roll_number_3"]
+        name_1 = "foo"
+        name_2 = "foo"
+        name_3 = "foo"
         email_id = str(roll_number) + "@nith.ac.in"
         phone_number = request.form["phone_number"]
         cgpi = 0.00
@@ -89,7 +92,7 @@ def register_student():
         return render_template("auth/register_student.html")
 
         
-@bp.route("/register_admin/", methods = ("GET", "POST"))
+@app.route("/register_admin/", methods = ("GET", "POST"))
 @logged_out_required
 def register_admin():
     if request.method == "POST":
@@ -98,7 +101,7 @@ def register_admin():
         password = generate_password_hash(request.form["password"])
         if email_id_taken(email_id):
             print("Email-id: {} already registered.".format(email_id))
-            return redirect(url_for("auth.register_admin"))
+            return redirect(url_for("register_admin"))
         else:
             add_admin(name, email_id, password)
             print("Admin: {} registered.".format(name))
@@ -107,19 +110,19 @@ def register_admin():
         return render_template("auth/register_admin.html")
 
 
-@bp.route("/login/", methods = ("GET", "POST"))
+@app.route("/login/", methods = ("GET", "POST"))
 @logged_out_required
 def login():
     if request.method == "POST":
         if request.form["choice"] == "Student":
-            return redirect(url_for("auth.login_student"))
+            return redirect(url_for("login_student"))
         else:
-            return redirect(url_for("auth.login_admin"))
+            return redirect(url_for("login_admin"))
     else:
         return render_template("auth/login.html")
 
 
-@bp.route("/login_student/", methods = ("GET", "POST"))
+@app.route("/login_student/", methods = ("GET", "POST"))
 @logged_out_required
 def login_student():
     if request.method == "POST":
@@ -131,7 +134,7 @@ def login_student():
             return redirect(url_for("auth.login_student"))
         elif not check_password_hash(user["password"], password):
             print("Wrong password entered.")
-            return redirect(url_for("auth.login_student"))
+            return redirect(url_for("login_student"))
         else:
             session.clear()
             session["type"] = "student"
@@ -140,12 +143,12 @@ def login_student():
             session["roll_number"] = user["roll_number"]
             session["phone_number"] = user["phone_number"]
             print("Student: {} logged in.".format(user["name"]))
-            return redirect(url_for("test.tests"))
+            return redirect(url_for("tests"))
     else:
         return render_template("auth/login_student.html")
 
 
-@bp.route("/login_admin/", methods = ("GET", "POST"))
+@app.route("/login_admin/", methods = ("GET", "POST"))
 @logged_out_required
 def login_admin():
     if request.method == "POST":
@@ -168,7 +171,7 @@ def login_admin():
         return render_template("auth/login_admin.html")
 
 
-@bp.route("/logout/")
+@app.route("/logout/")
 @logged_in_required
 def logout():
     session.clear()

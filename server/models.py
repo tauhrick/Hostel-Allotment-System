@@ -3,7 +3,7 @@ from server import db
 class Student(db.Model):
     __tablename__ = "students"
     id = db.Column(db.Integer, primary_key = True)
-    roll_number = db.Column(db.Integer, unqiue = True)
+    roll_number = db.Column(db.Integer, unique = True)
     name = db.Column(db.String(20))
     email_id = db.Column(db.String(20), unique = True)
     phone_number = db.Column(db.Integer)
@@ -27,13 +27,14 @@ class Team(db.Model):
 
 class Member(db.Model):
     __tablename__ = "member"
+    id = db.Column(db.Integer, primary_key = True)
     student_id = db.Column(db.Integer, db.ForeignKey("Student.id"))
     team_id = db.Column(db.Integer, db.ForeignKey("Team.id"))
 
 
 class Room(db.Model):
     __tablename__ = "rooms"
-    room_no = db.Column(db.Integer)
+    room_no = db.Column(db.Integer, primary_key = True)
     location_x = db.Column(db.Integer)
     location_y = db.Column(db.Integer)
     location_z = db.Column(db.Integer)
@@ -42,14 +43,15 @@ class Room(db.Model):
 
 
 class Round(db.Model):
-    __tablename__ = "rounds"
-   round_no = db.Column(db.Integer)
+   __tablename__ = "rounds"
+   round_no = db.Column(db.Integer, primary_key = True)
    start_time = db.Column(db.DateTime)
    duration = db.Column(db.Integer)
 
 
 class Choice(db.Model):
     __tablename__ = "choices"
+    id = db.Column(db.Integer, primary_key = True)
     team_id = db.Column(db.Integer, db.ForeignKey("Team.id"))
     choice_no = db.Column(db.Integer)
     room_no = db.Column(db.Integer, db.ForeignKey("Room.room_no"))
