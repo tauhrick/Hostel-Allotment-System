@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta name = "viewport" content = "width=device-width, initial-scale=1">
+        <link rel = "stylesheet" href = "https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+        <link rel = "stylesheet" href = "{{ url_for('static', filename = 'main.css') }}">
+    </head>
+    <body>
+        {% if "name" in session %}
+            <div id = "box">
+                <div id = "navbar" class = "sticky">
+                  <div id = "user_name">Hello, {{ session["name"] }}</div>
+                  <a class = "active" href = "{{ url_for('test.tests') }}">E-Quiz</a>
+                  {% if session["type"] == "admin" %}
+                        <a href = "{{ url_for('test.create_test') }}">Create Test</a>
+                  {% endif %}
+                  <a href = "{{ url_for('auth.logout') }}">Logout</a>
+                </div>
+            </div>
+        {% endif %}
+<!-- 
+        {% with messages = get_flashed_messages() %}
+            <div class = "flash-alerts">
+              {% for message in messages %}
+                  <div class = "alert alert-warning alert-dismissible fade show" role = "alert">
+                    <strong>Alert:</strong> {{ message }}
+                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+                      <span aria-hidden = "true">&times;</span>
+                    </button>
+                  </div>
+              {% endfor %}
+            </div>
+        {% endwith %}
+ -->
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

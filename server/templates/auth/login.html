@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <br><br>
+    <center><h1>Login</h1></center>
+    <br>
+    <h3>Choose an appropriate option:</h3>
+    <form method="POST">
+        <input type="radio" name="choice" value="Admin" required>Admin<br>
+        <input type="radio" name="choice" value="Student" required>Student<br>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
