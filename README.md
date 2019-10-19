@@ -27,5 +27,5 @@ Website to allot rooms in a hostel to students
 - [Digvijay Janartha](https://github.com/digu-007)
 - [Lakshay Gupta](https://github.com/lakshaygpt28)
 - [Rohit](https://github.com/rohit645)
-- [Rohit Sharma](https://github.com/rohit645)
+- [Rohit Sharma](https://github.com/RaOne009)
 - [Mukul Koundal](https://github.com/rohit645)
