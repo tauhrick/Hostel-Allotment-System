@@ -23,5 +23,3 @@ def extract():
         dict[Roll_no] = {"Name": name, "CGPA": gpa}
     print(dict)
     return dict
-
-extract()

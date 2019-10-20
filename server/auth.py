@@ -68,6 +68,7 @@ def register():
 
 # To-do:
 # - web-scraping for cgpi, name
+# - checks on the form
 @app.route("/register_student/", methods = ("GET", "POST"))
 @logged_out_required
 def register_student():
@@ -78,17 +79,90 @@ def register_student():
         name_1 = "foo"
         name_2 = "foo"
         name_3 = "foo"
-        email_id = str(roll_number) + "@nith.ac.in"
-        phone_number = request.form["phone_number"]
-        cgpi = 0.00
-        year = request.form["year"]
+        email_id_1 = str(roll_number_1) + "@nith.ac.in"
+        email_id_2 = str(roll_number_2) + "@nith.ac.in"
+        email_id_3 = str(roll_number_3) + "@nith.ac.in"
+        phone_number_1 = request.form["phone_number_1"]
+        phone_number_2 = request.form["phone_number_2"]
+        phone_number_3 = request.form["phone_number_3"]
+        cgpi_1 = 0.00
+        cgpi_2 = 0.00
+        cgpi_3 = 0.00
+        year_1 = 2000 + int(roll_number_1[ : 2])
+        year_2 = 2000 + int(roll_number_2[ : 2])
+        year_3 = 2000 + int(roll_number_3[ : 2])
         password = generate_password_hash(request.form["password"])
-        if roll_number_taken(roll_number):
-            print("Roll number: {} already registered.".format(roll_number))
-            return redirect(url_for("auth.register_student"))
+        if Student.query.filter_by(roll_number = roll_number_1).first() is None:
+            print("Roll number: {} already registered.".format(roll_number_1))
+            return redirect(url_for(register_student))
+        elif Student.query.filter_by(roll_number = roll_number_2).first() is None:
+            print("Roll number: {} already registered.".format(roll_number_2))
+            return redirect(url_for(register_student))
+        elif Student.query.filter_by(roll_number = roll_number_3).first() is None:
+            print("Roll number: {} already registered.".format(roll_number_3))
+            return redirect(url_for(register_student))
+        elif roll_number_1 == roll_number_2 or roll_number_1 == roll_number_3 or roll_number_2 == roll_number_3:
+            print("Roll numbers can't be same")
+            return redirect(url_for(register_student))
         else:
-            print("Student: {} registered.".format(name))
-            return redirect(url_for("index"))
+            student_1 = Student(
+                roll_number = roll_number_1,
+                name = name_1,
+                email_id = email_id_1,
+                phone_number = phone_number_1,
+                cgpi = cgpi_1,
+                year = year_1,
+                password = password
+            )
+            db.session.add(student_1)
+            db.commit()
+            student_2 = Student(
+                roll_number = roll_number_2,
+                name = name_2,
+                email_id = email_id_2,
+                phone_number = phone_number_2,
+                cgpi = cgpi_2,
+                year = year_2,
+                password = password
+            )
+            db.session.add(student_2)
+            db.commit()
+            student_3 = Student(
+                roll_number = roll_number_3,
+                name = name_3,
+                email_id = email_id_3,
+                phone_number = phone_number_3,
+                cgpi = cgpi_3,
+                year = year_3,
+                password = password
+            )
+            db.session.add(student_3)
+            db.commit()
+            team = Team(
+                size = 3,
+                is_lock = False
+            )
+            db.session.add(team)
+            db.commit()
+            member_1 = Member(
+                student_id = student_1.id,
+                team_id = team.id
+            )
+            db.session.add(member_1)
+            db.session.commit()
+            member_2 = Member(
+                student_id = student_2.id,
+                team_id = team.id
+            )
+            db.session.add(member_2)
+            member_3 = Member(
+                student_id = student_3.id,
+                team_id = team.id
+            )
+            db.session.add(member_3)
+            db.session.commit()
+            print("Team registered")
+            return redirect(url_for("home_page"))
     else:
         return render_template("auth/register_student.html")
 
@@ -106,7 +180,7 @@ def register_admin():
         else:
             add_admin(name, email_id, password)
             print("Admin: {} registered.".format(name))
-            return redirect(url_for("index"))
+            return redirect(url_for("home_page"))
     else:
         return render_template("auth/register_admin.html")
 
@@ -176,4 +250,4 @@ def login_admin():
 @logged_in_required
 def logout():
     session.clear()
-    return redirect(url_for("index"))
+    return redirect(url_for("home_page"))
