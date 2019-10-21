@@ -77,9 +77,11 @@ function main(){
     renderer.setSize( width, height );
     document.body.appendChild( renderer.domElement );
 
-    var light = new THREE.DirectionalLight( 0xffffff, 1 );
-    light.position.set( 5, 5, 5 );
+    var light = new THREE.DirectionalLight( 0xffffff, 2 );
+    light.position.set( 5, 2, 5 );
     light.lookAt( 0, 0, 0 );
+    var lh = new THREE.DirectionalLightHelper(light);
+    scene.add(lh);
     scene.add( light );
 
     var size = 50;
@@ -114,8 +116,8 @@ function main(){
         scene.add( cube );
     }
 
-    camera.position.set( -2, 5, -5 );
-    camera.lookAt(5,0,5);
+    camera.position.set( 10, 2, 10 );
+    camera.lookAt(0,0,0);
 
     const directions = {
         'w': new Vector3( 0, 0,-1),

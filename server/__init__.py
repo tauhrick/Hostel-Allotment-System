@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from server.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -11,6 +11,6 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def home_page():
-    return "Hello there!"
+    return render_template("index.html")
 
 from server import models, auth, api
