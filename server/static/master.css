@@ -1,0 +1,92 @@
+body {
+    padding-top: 80px;
+}
+.jumbotron {
+  color: #2c3e50;
+  background: #ecf0f1;
+  text-align: center;
+}
+.navbar-inverse {
+  background: #2c3e50;
+  color: white;
+}
+.navbar-inverse .navbar-brand, .navbar-inverse a{
+  color:white;
+}
+.navbar-inverse .navbar-nav>li>a {
+  color: white;
+}
+.thumbnail {
+    text-align: center;
+    color: #2c3e50;
+    background: #ecf0f1;
+}
+.thumbnail .box {
+ position: relative;
+ overflow: hidden;
+}
+
+
+
+
+.containerrr {
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+.containerr .box {
+    position: relative;
+    width: 30%;
+    height: 300px;
+    background:#ecf0f1;
+    margin: 15px;
+    box-sizing: border-box;
+    display: inline-block;
+    overflow: hidden;
+    border: black 1px solid;
+    border-radius: 10px;
+    text-align: center;
+    color: #2c3e50;
+}
+.containerr .box .imgbox {
+    position: relative;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+}
+.containerr .box .imgbox img {
+    max-width: 100%;
+    transition: transform 1s;
+
+}
+.containerr .box:hover .imgbox img {
+    transform: scale(1.7);
+}
+.containerr .box .detail{
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    position: absolute;
+    background:#ecf0f1;
+    opacity: .8;
+    transform: scaleY(0);
+    transition: transform .3s;
+}
+.containerr .box .detail .content{
+    text-align: center;
+    color:#2c3e50;
+}
+.containerr .box .detail h2{
+    color: green;
+}
+.containerr .box:hover .detail{
+    transform: scaleY(1);
+    overflow: scroll;
+}
+.footer {
+    text-align: center;
+}

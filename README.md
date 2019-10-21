@@ -13,7 +13,7 @@ Website to allot rooms in a hostel to students
 - [X] Prepare design document
 
 ### Week 2 (October 14, 2019 - ...)
-- [ ] Link server backend to SQL database
+- [X] Link server backend to SQL database
 - [ ] Implement Login/Register
 - [ ] Implement basic frontend
 - [ ] Implement allocation logic
@@ -27,5 +27,5 @@ Website to allot rooms in a hostel to students
 - [Digvijay Janartha](https://github.com/digu-007)
 - [Lakshay Gupta](https://github.com/lakshaygpt28)
 - [Rohit](https://github.com/rohit645)
-- [Rohit Sharma](https://github.com/rohit645)
+- [Rohit Sharma](https://github.com/RaOne009)
 - [Mukul Koundal](https://github.com/rohit645)
