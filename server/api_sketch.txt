@@ -1,0 +1,33 @@
+/get_rooms:
+- Input:
+    - hostel
+- Output:
+    - rooms_list (room with it's status)
+
+
+/add_preference:
+- Input:
+    - room
+    - user
+- Output:
+    - None
+- Adds preference to user
+
+
+/remove_preference:
+- Input:
+    - room
+    - user
+- Output:
+    - None
+- Erases preference of user
+
+
+/get_user_info:
+- Input:
+    - None
+- Output:
+    - gives user data (+ room_preferences + room (if allocated))
+
+
+

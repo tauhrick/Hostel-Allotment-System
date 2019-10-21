@@ -28,8 +28,8 @@ class Team(db.Model):
 class Member(db.Model):
     __tablename__ = "member"
     id = db.Column(db.Integer, primary_key = True)
-    student_id = db.Column(db.Integer, db.ForeignKey("Student.id"))
-    team_id = db.Column(db.Integer, db.ForeignKey("Team.id"))
+    student_id = db.Column(db.Integer, db.ForeignKey("students.id"))
+    team_id = db.Column(db.Integer, db.ForeignKey("teams.id"))
 
 
 class Room(db.Model):
@@ -52,6 +52,6 @@ class Round(db.Model):
 class Choice(db.Model):
     __tablename__ = "choices"
     id = db.Column(db.Integer, primary_key = True)
-    team_id = db.Column(db.Integer, db.ForeignKey("Team.id"))
+    team_id = db.Column(db.Integer, db.ForeignKey("teams.id"))
     choice_no = db.Column(db.Integer)
-    room_no = db.Column(db.Integer, db.ForeignKey("Room.room_no"))
+    room_no = db.Column(db.Integer, db.ForeignKey("rooms.room_no"))
