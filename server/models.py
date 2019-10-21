@@ -3,7 +3,7 @@ from server import db
 class Student(db.Model):
     __tablename__ = "students"
     id = db.Column(db.Integer, primary_key = True)
-    roll_number = db.Column(db.Integer, unqiue = True)
+    roll_number = db.Column(db.Integer, unique = True)
     name = db.Column(db.String(20))
     email_id = db.Column(db.String(20), unique = True)
     phone_number = db.Column(db.Integer)
