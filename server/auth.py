@@ -212,18 +212,19 @@ def login_student():
         elif not check_password_hash(user.password, password):
             print("Wrong password entered.")
             return redirect(url_for("login_student"))
-        else:
-            session.clear()
-            session["type"] = "student"
-            session["id"] = user.id
-            session["roll_number"] = user.roll_number
-            session["name"] = user.name
-            session["email_id"] = user.email_id
-            session["phone_number"] = user.phone_number
-            session["cgpi"] = user.cgpi
-            session["year"] = user.year
-            print("Student: {} logged in.".format(user.name))
-            return redirect(url_for("home_page"))
+        team = Member.query.filter_by(student_id = user.id).first()
+        session.clear()
+        session["type"] = "student"
+        session["student_id"] = user.id
+        session["team_id"] = team.team_id
+        session["roll_number"] = user.roll_number
+        session["name"] = user.name
+        session["email_id"] = user.email_id
+        session["phone_number"] = user.phone_number
+        session["cgpi"] = user.cgpi
+        session["year"] = user.year
+        print("Student: {} logged in.".format(user.name))
+        return redirect(url_for("home_page"))
     else:
         return render_template("auth/login_student.html")
 

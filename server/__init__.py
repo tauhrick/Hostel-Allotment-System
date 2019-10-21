@@ -13,4 +13,4 @@ migrate = Migrate(app, db)
 def home_page():
     return "Hello there!"
 
-from server import models, auth
+from server import models, auth, api
