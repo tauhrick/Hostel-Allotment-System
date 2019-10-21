@@ -1,40 +1,53 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en" dir="ltr">
     <head>
-        <title>{% block title %}{% endblock %}</title>
-        <meta name = "viewport" content = "width=device-width, initial-scale=1">
-        <link rel = "stylesheet" href = "https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
-        <link rel = "stylesheet" href = "{{ url_for('static', filename = 'main.css') }}">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="bootstrap-3.4.1-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="master.css">
+        <title>Hostal-Allotment</title>
     </head>
     <body>
-        {% if "name" in session %}
-            <div id = "box">
-                <div id = "navbar" class = "sticky">
-                  <div id = "user_name">Hello, {{ session["name"] }}</div>
-                  <a class = "active" href = "{{ url_for('test.tests') }}">E-Quiz</a>
-                  {% if session["type"] == "admin" %}
-                        <a href = "{{ url_for('test.create_test') }}">Create Test</a>
-                  {% endif %}
-                  <a href = "{{ url_for('auth.logout') }}">Logout</a>
-                </div>
-            </div>
-        {% endif %}
-<!-- 
-        {% with messages = get_flashed_messages() %}
-            <div class = "flash-alerts">
-              {% for message in messages %}
-                  <div class = "alert alert-warning alert-dismissible fade show" role = "alert">
-                    <strong>Alert:</strong> {{ message }}
-                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
-                      <span aria-hidden = "true">&times;</span>
-                    </button>
-                  </div>
-              {% endfor %}
-            </div>
-        {% endwith %}
- -->
-        {% block content %}
-        {% endblock %}
-    </body>
+
+
+{% block body %} {% endblock %}
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <ul class="list-inline text-center">
+          <li class="list-inline-item">
+            <a href="#">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <p class="copyright text-muted">Copyright © Tony 2k19</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript"src="bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+</body>
 </html>
