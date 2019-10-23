@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
+
+{% block title %}Hostel Allotment{%endblock%} 
+
 {% block body %}
-
-
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -21,21 +21,20 @@
                     <li><a href="#">Contact</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Logout</a></li>
+                    {% if session.get("type", None) == "student" %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-
-
     <div class="container">
         <div class="jumbotron">
             <h1>  Welcome to <span class="glyphicon glyphicon-header" aria-hidden="true"></span><span class="glyphicon glyphicon-record" aria-hidden="true"></span>stal-Allotment System</h1>
         </div>
-
-
 
         <!-- <div class="row">
             <div class="col-lg-4 col-sm-6">
