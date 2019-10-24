@@ -1,15 +1,25 @@
-{% extends "layout.html" %}
+	{% extends "layout.html" %}
 
-{% block title %}Login Student{% endblock %}
+	{% block title %}Login Student{% endblock %}
 
-{% block content %}
-    <br><br>
-    <center><h1>Login Student</h1></center>
-    <br>
-    <h3>Please fill out the following information:</h3>
-    <form method="POST">
-        <i>Roll Number:</i> <input type="text" name="roll_number" required><br>
-        <i>Password:</i> <input type="password" name="password" required><br>
-        <input type="submit" value="Submit">
-    </form>
+	{% block body %}
+
+	<div class="box-login">
+		<h2>login </h2>
+		<form method="POST">
+			<div class="inputbox">
+				<input type="text" name=""required="">
+				<label>username</label>
+			</div>
+			    <div class="inputbox">
+					<input type="password" name=""required="">
+					<label>password</label>
+				</div>
+				<input type="submit" name=""value="submit">
+			</div>
+
+		</form>
+	</div>
+
+
 {% endblock %}
