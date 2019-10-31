@@ -62,26 +62,26 @@ var rooms = [
     [3, 7, 2],
     [3, 8, 2],
 
-    [4, 1, -1],
-    [5, 1, -1],
-    [6, 1, -1],
-    [7, 1, -1],
-    [8, 1, -1],
-    [1, 4, -1],
-    [1, 5, -1],
-    [1, 6, -1],
-    [1, 7, -1],
-    [1, 8, -1],
-    [4, 3, -1],
-    [5, 3, -1],
-    [6, 3, -1],
-    [7, 3, -1],
-    [8, 3, -1],
-    [3, 4, -1],
-    [3, 5, -1],
-    [3, 6, -1],
-    [3, 7, -1],
-    [3, 8, -1],
+    [4, 1, 3],
+    [5, 1, 3],
+    [6, 1, 3],
+    [7, 1, 3],
+    [8, 1, 3],
+    [1, 4, 3],
+    [1, 5, 3],
+    [1, 6, 3],
+    [1, 7, 3],
+    [1, 8, 3],
+    [4, 3, 3],
+    [5, 3, 3],
+    [6, 3, 3],
+    [7, 3, 3],
+    [8, 3, 3],
+    [3, 4, 3],
+    [3, 5, 3],
+    [3, 6, 3],
+    [3, 7, 3],
+    [3, 8, 3],
 ];
 
 function main(){
@@ -92,17 +92,20 @@ function main(){
     var scene = new THREE.Scene();
     scene.background = new THREE.Color( 0x050490 );
 
+    info = document.querySelector("#info");
+    popup = document.querySelector("#popup");
+
     var camera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
 
-    var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize( width, height );
     document.body.appendChild( renderer.domElement );
 
     var light = new THREE.DirectionalLight( 0xffffff, 2 );
     light.position.set( 5, 2, 5 );
     light.lookAt( 0, 0, 0 );
-    var lh = new THREE.DirectionalLightHelper(light);
-    scene.add(lh);
+    // var lh = new THREE.DirectionalLightHelper(light);
+    // scene.add(lh);
     scene.add( light );
 
     var size = 50;
@@ -137,6 +140,7 @@ function main(){
         scene.add( cube );
     }
 
+
     camera.position.set( 10, 2, 10 );
     camera.lookAt(0,0,0);
 
@@ -161,59 +165,74 @@ function main(){
     window.onkeypress = handleKeyBoardInput;
 
     var canvas = renderer.domElement;
-    var pointerLocked = false;
+    // var pointerLocked = false;
     var look = camera.rotation.clone().reorder( "YXZ" );
 
-    canvas.onclick = function () {
-        this.requestPointerLock();
-    }
+    var is_drag_state = false;
 
-    document.addEventListener('pointerlockchange', () => {
-        if (document.pointerLockElement === canvas) {
-            pointerLocked = true;
-        } else {
-            pointerLocked = false;
+    canvas.onmousedown = function( evt ) {
+        is_drag_state = true;
+    };
+
+    canvas.onmousemove = function( evt ) {
+        if (is_drag_state) {
+            const x = - evt.movementY / 500;
+            const y = - evt.movementX / 500;
+            look.x -= x;
+            look.y -= y;
+            camera.rotation.copy( look );
         }
-        console.log("pointer locked:", pointerLocked);
-    });
+    };
 
-    var prv_active;
-    var curr_active;
+    canvas.onmouseup = function( evt ) {
+        is_drag_state = false;
+    };
+
+    prv_active = undefined;
+    curr_active = undefined;
 
     document.addEventListener("mousemove", (e) => {
-        if (!pointerLocked) {
-            // normalized device coordinates
-            var mouse = {};
-            mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-            mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+        // normalized device coordinates
+        var mouse = {};
+        mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
-            var raycaster = new THREE.Raycaster();
+        var raycaster = new THREE.Raycaster();
 
-            raycaster.setFromCamera( mouse, camera );
+        raycaster.setFromCamera( mouse, camera );
 
-            var intersects = raycaster.intersectObjects( scene.children );
-            if (intersects.length == 0) {
-                curr_active = undefined;
-            } else {
-                curr_active = intersects[ 0 ].object;
-            }
-
-            if (prv_active && prv_active.type == "Mesh") {
-                prv_active.material.color = new THREE.Color( 0x050490 );
-            }
-            
-            if (curr_active && curr_active.type == "Mesh") {
-                curr_active.material.color = new THREE.Color( 0xff0000 );
-            }
-            prv_active = curr_active;
+        var intersects = raycaster.intersectObjects( scene.children );
+        if (intersects.length == 0) {
+            curr_active = undefined;
         } else {
-            const x = - e.movementY / 500; //  +ve, up  / -ve, down  //
-            const y = - e.movementX / 500; // +ve, left / -ve, right //
-            look.x += x;
-            look.y += y;
-            camera.rotation.copy(look);
+            curr_active = intersects[ 0 ].object;
+        }
+
+        if (prv_active && prv_active.type == "Mesh") {
+            prv_active.material.color = new THREE.Color( 0x050490 );
+        }
+        
+        if (curr_active && curr_active.type == "Mesh") {
+            curr_active.material.color = new THREE.Color( 0xff0000 );
+        }
+        prv_active = curr_active;
+
+        if(curr_active && curr_active.type == "Mesh"){
+            info.style.visibility = "visible";
+            var x = curr_active.position.x;
+            var y = curr_active.position.y;
+            var z = curr_active.position.z;
+            info.textContent = `Room Number: 000\nRoom Location: ${x},${y},${z}\n`;
+        }
+        else {
+            info.style.visibility = "hidden";
+            info.textContent = ``;
         }
     });
+    
+    canvas.onclick = function () {
+        popup.style.visibility = "visible";
+    };
 
 	function animate() {
 		requestAnimationFrame( animate );
@@ -224,3 +243,24 @@ function main(){
 }
 
 window.onload = main;
+
+function hide_box() {
+    popup.style.visibility = "hidden";
+}
+
+function add_preference() {
+    $.ajax({
+        url: "http://localhost:8000/api/add_preference/1/",
+        method: "POST",
+        success: function(resp) {
+            console.log(resp);
+        },
+        error: function(a, b, c) {
+            console.log(c);
+        }
+    });
+}
+
+function remove_preference() {
+
+}

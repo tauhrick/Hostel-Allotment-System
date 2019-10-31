@@ -1,2 +1,26 @@
 body { margin: 0; }
+
 canvas { width: 100%; height: 100% }
+
+#info {
+    position: absolute;
+    bottom: 50px;
+    color: black;
+    left: 10px;
+    height: 20px;
+    border: 1px red dotted;
+    z-index: 10;
+    padding: 10px;
+    background: rgba(255,255,255,0.5);
+    font-family: sans-serif;
+}
+
+#popup {
+    visibility: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: cornflowerblue;
+    border: 2px white solid;
+    transform: translate(-50%, -50%);
+}

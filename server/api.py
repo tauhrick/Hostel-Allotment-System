@@ -10,8 +10,8 @@ def get_rooms():
     return jsonify(rooms)
 
 
-@app.route("/api/add_preference/<int:room_no>/")
-def add_preference():
+@app.route("/api/add_preference/<int:room_no>/", methods = ["POST"])
+def add_preference(room_no):
     choice = Choice(
         team_id = session["team_id"],
         choice_no = 1,
