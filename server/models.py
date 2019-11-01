@@ -23,6 +23,7 @@ class Team(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     size = db.Column(db.Integer)
     is_lock = db.Column(db.Boolean)
+    room_allocated = db.Column(db.Integer, db.ForeignKey("rooms.room_no"), default = -1)
 
 
 class Member(db.Model):
