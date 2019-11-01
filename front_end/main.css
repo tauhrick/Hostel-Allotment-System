@@ -3,6 +3,7 @@ body { margin: 0; }
 canvas { width: 100%; height: 100% }
 
 #info {
+    visibility: hidden;
     position: absolute;
     bottom: 50px;
     color: black;

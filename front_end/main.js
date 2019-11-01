@@ -1,6 +1,4 @@
 function main(){
-    var rooms = [];
-
     var width = window.innerWidth;
     var height = window.innerHeight;
     var aspect = width / height;
@@ -31,51 +29,46 @@ function main(){
     gridHelper.position.y = -1.5;
     scene.add( gridHelper );
 
-
-    function init_display() {
-        for (var i = 0; i < rooms.length; ++i) {
-            var geometry = new THREE.BoxGeometry( .8, .8, .8 );
-
-            // mesh
-            var material = new THREE.MeshStandardMaterial( {
-                    color: 0x050490,
-                    polygonOffset: true,
-                    polygonOffsetFactor: 1, // positive value pushes polygon further away
-                    polygonOffsetUnits: 1
-            } );
-            var mesh = new THREE.Mesh( geometry, material );
-            scene.add( mesh )
-
-            // wireframe
-            var geo = new THREE.EdgesGeometry( mesh.geometry ); // or WireframeGeometry
-            var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
-            var wireframe = new THREE.LineSegments( geo, mat );
-            mesh.add( wireframe );
-
-            var cube = new THREE.Mesh( geometry, material );
-            cube.position.set(rooms[i][0], rooms[i][2], rooms[i][1]);
-            mesh.position.set(rooms[i][0], rooms[i][2], rooms[i][1]);
-            scene.add( cube );
-        }
-
-
-        camera.position.set( 10, 2, 10 );
-        camera.lookAt(0,0,0);
-    }
-
     $.ajax({
         url: "http://localhost:8000/api/get_rooms/",
         success: function (resp) {
             resp = JSON.parse(resp);
-            // console.log(resp);
+
             for (var i = 0; i < resp.length; ++i) {
-                var room = [resp[i]["location_x"], resp[i]["location_y"], resp[i]["location_z"]];
-                rooms.push(room);
-                console.log(room);
+                var room = [resp[i]["location_x"], resp[i]["location_z"], resp[i]["location_y"]];
+
+                var geometry = new THREE.BoxGeometry( .8, .8, .8 );
+
+                // mesh
+                var material = new THREE.MeshStandardMaterial( {
+                        color: 0x050490,
+                        polygonOffset: true,
+                        polygonOffsetFactor: 1, // positive value pushes polygon further away
+                        polygonOffsetUnits: 1
+                } );
+                var mesh = new THREE.Mesh( geometry, material );
+
+                // wireframe
+                var geo = new THREE.EdgesGeometry( mesh.geometry ); // or WireframeGeometry
+                var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
+                var wireframe = new THREE.LineSegments( geo, mat );
+                mesh.add( wireframe );
+
+                var cube = new THREE.Mesh( geometry, material );
+                
+                cube.position.set(...room);
+                mesh.position.set(...room);
+                mesh.userData.room = resp[i];
+                cube.userData.room = resp[i];
+
+                scene.add( cube );
+                scene.add( mesh );
             }
-            console.log(rooms);
         }
     });
+    
+    camera.position.set( 10, 2, 10 );
+    camera.lookAt(0,0,0);
 
     const directions = {
         'w': new Vector3( 0, 0,-1),
@@ -155,7 +148,7 @@ function main(){
             var x = curr_active.position.x;
             var y = curr_active.position.y;
             var z = curr_active.position.z;
-            info.textContent = `Room Number: 000\nRoom Location: ${x},${y},${z}\n`;
+            info.textContent = `Room Number: ${curr_active.userData.room['room_no']}\nRoom Location: ${x},${y},${z}\n`;
         }
         else {
             info.style.visibility = "hidden";
