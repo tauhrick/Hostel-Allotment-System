@@ -28,6 +28,3 @@
     - None
 - Output:
     - gives user data (+ room_preferences + room (if allocated))
-
-
-

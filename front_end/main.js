@@ -1,89 +1,3 @@
-var rooms = [
-    [4, 1, 0],
-    [5, 1, 0],
-    [6, 1, 0],
-    [7, 1, 0],
-    [8, 1, 0],
-    [1, 4, 0],
-    [1, 5, 0],
-    [1, 6, 0],
-    [1, 7, 0],
-    [1, 8, 0],
-    [4, 3, 0],
-    [5, 3, 0],
-    [6, 3, 0],
-    [7, 3, 0],
-    [8, 3, 0],
-    [3, 4, 0],
-    [3, 5, 0],
-    [3, 6, 0],
-    [3, 7, 0],
-    [3, 8, 0],  
-
-    [4, 1, 1],
-    [5, 1, 1],
-    [6, 1, 1],
-    [7, 1, 1],
-    [8, 1, 1],
-    [1, 4, 1],
-    [1, 5, 1],
-    [1, 6, 1],
-    [1, 7, 1],
-    [1, 8, 1],
-    [4, 3, 1],
-    [5, 3, 1],
-    [6, 3, 1],
-    [7, 3, 1],
-    [8, 3, 1],
-    [3, 4, 1],
-    [3, 5, 1],
-    [3, 6, 1],
-    [3, 7, 1],
-    [3, 8, 1],
-    
-    [4, 1, 2],
-    [5, 1, 2],
-    [6, 1, 2],
-    [7, 1, 2],
-    [8, 1, 2],
-    [1, 4, 2],
-    [1, 5, 2],
-    [1, 6, 2],
-    [1, 7, 2],
-    [1, 8, 2],
-    [4, 3, 2],
-    [5, 3, 2],
-    [6, 3, 2],
-    [7, 3, 2],
-    [8, 3, 2],
-    [3, 4, 2],
-    [3, 5, 2],
-    [3, 6, 2],
-    [3, 7, 2],
-    [3, 8, 2],
-
-    [4, 1, -1],
-    [5, 1, -1],
-    [6, 1, -1],
-    [7, 1, -1],
-    [8, 1, -1],
-    [1, 4, -1],
-    [1, 5, -1],
-    [1, 6, -1],
-    [1, 7, -1],
-    [1, 8, -1],
-    [4, 3, -1],
-    [5, 3, -1],
-    [6, 3, -1],
-    [7, 3, -1],
-    [8, 3, -1],
-    [3, 4, -1],
-    [3, 5, -1],
-    [3, 6, -1],
-    [3, 7, -1],
-    [3, 8, -1],
-];
-
 function main(){
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -92,17 +6,20 @@ function main(){
     var scene = new THREE.Scene();
     scene.background = new THREE.Color( 0x050490 );
 
+    info = document.querySelector("#info");
+    popup = document.querySelector("#popup");
+
     var camera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
 
-    var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize( width, height );
     document.body.appendChild( renderer.domElement );
 
     var light = new THREE.DirectionalLight( 0xffffff, 2 );
     light.position.set( 5, 2, 5 );
     light.lookAt( 0, 0, 0 );
-    var lh = new THREE.DirectionalLightHelper(light);
-    scene.add(lh);
+    // var lh = new THREE.DirectionalLightHelper(light);
+    // scene.add(lh);
     scene.add( light );
 
     var size = 50;
@@ -112,31 +29,44 @@ function main(){
     gridHelper.position.y = -1.5;
     scene.add( gridHelper );
 
-    for (var i = 0; i < rooms.length; ++i) {
-        var geometry = new THREE.BoxGeometry( .8, .8, .8 );
+    $.ajax({
+        url: "http://localhost:8000/api/get_rooms/",
+        success: function (resp) {
+            resp = JSON.parse(resp);
 
-        // mesh
-        var material = new THREE.MeshStandardMaterial( {
-                color: 0x050490,
-                polygonOffset: true,
-                polygonOffsetFactor: 1, // positive value pushes polygon further away
-                polygonOffsetUnits: 1
-        } );
-        var mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh )
+            for (var i = 0; i < resp.length; ++i) {
+                var room = [resp[i]["location_x"], resp[i]["location_z"], resp[i]["location_y"]];
 
-        // wireframe
-        var geo = new THREE.EdgesGeometry( mesh.geometry ); // or WireframeGeometry
-        var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
-        var wireframe = new THREE.LineSegments( geo, mat );
-        mesh.add( wireframe );
+                var geometry = new THREE.BoxGeometry( .8, .8, .8 );
 
-        var cube = new THREE.Mesh( geometry, material );
-        cube.position.set(rooms[i][0], rooms[i][2], rooms[i][1]);
-        mesh.position.set(rooms[i][0], rooms[i][2], rooms[i][1]);
-        scene.add( cube );
-    }
+                // mesh
+                var material = new THREE.MeshStandardMaterial( {
+                        color: 0x050490,
+                        polygonOffset: true,
+                        polygonOffsetFactor: 1, // positive value pushes polygon further away
+                        polygonOffsetUnits: 1
+                } );
+                var mesh = new THREE.Mesh( geometry, material );
 
+                // wireframe
+                var geo = new THREE.EdgesGeometry( mesh.geometry ); // or WireframeGeometry
+                var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
+                var wireframe = new THREE.LineSegments( geo, mat );
+                mesh.add( wireframe );
+
+                var cube = new THREE.Mesh( geometry, material );
+                
+                cube.position.set(...room);
+                mesh.position.set(...room);
+                mesh.userData.room = resp[i];
+                cube.userData.room = resp[i];
+
+                scene.add( cube );
+                scene.add( mesh );
+            }
+        }
+    });
+    
     camera.position.set( 10, 2, 10 );
     camera.lookAt(0,0,0);
 
@@ -161,59 +91,76 @@ function main(){
     window.onkeypress = handleKeyBoardInput;
 
     var canvas = renderer.domElement;
-    var pointerLocked = false;
+    // var pointerLocked = false;
     var look = camera.rotation.clone().reorder( "YXZ" );
 
-    canvas.onclick = function () {
-        this.requestPointerLock();
-    }
+    var is_drag_state = false;
 
-    document.addEventListener('pointerlockchange', () => {
-        if (document.pointerLockElement === canvas) {
-            pointerLocked = true;
-        } else {
-            pointerLocked = false;
+    canvas.onmousedown = function( evt ) {
+        is_drag_state = true;
+    };
+
+    canvas.onmousemove = function( evt ) {
+        if (is_drag_state) {
+            const x = - evt.movementY / 500;
+            const y = - evt.movementX / 500;
+            look.x -= x;
+            look.y -= y;
+            camera.rotation.copy( look );
         }
-        console.log("pointer locked:", pointerLocked);
-    });
+    };
 
-    var prv_active;
-    var curr_active;
+    canvas.onmouseup = function( evt ) {
+        is_drag_state = false;
+    };
+
+    prv_active = undefined;
+    curr_active = undefined;
 
     document.addEventListener("mousemove", (e) => {
-        if (!pointerLocked) {
-            // normalized device coordinates
-            var mouse = {};
-            mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-            mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+        // normalized device coordinates
+        var mouse = {};
+        mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
-            var raycaster = new THREE.Raycaster();
+        var raycaster = new THREE.Raycaster();
 
-            raycaster.setFromCamera( mouse, camera );
+        raycaster.setFromCamera( mouse, camera );
 
-            var intersects = raycaster.intersectObjects( scene.children );
-            if (intersects.length == 0) {
-                curr_active = undefined;
-            } else {
-                curr_active = intersects[ 0 ].object;
-            }
-
-            if (prv_active && prv_active.type == "Mesh") {
-                prv_active.material.color = new THREE.Color( 0x050490 );
-            }
-            
-            if (curr_active && curr_active.type == "Mesh") {
-                curr_active.material.color = new THREE.Color( 0xff0000 );
-            }
-            prv_active = curr_active;
+        var intersects = raycaster.intersectObjects( scene.children );
+        if (intersects.length == 0) {
+            curr_active = undefined;
         } else {
-            const x = - e.movementY / 500; //  +ve, up  / -ve, down  //
-            const y = - e.movementX / 500; // +ve, left / -ve, right //
-            look.x += x;
-            look.y += y;
-            camera.rotation.copy(look);
+            curr_active = intersects[ 0 ].object;
+        }
+
+        if (prv_active && prv_active.type == "Mesh") {
+            prv_active.material.color = new THREE.Color( 0x050490 );
+        }
+        
+        if (curr_active && curr_active.type == "Mesh") {
+            curr_active.material.color = new THREE.Color( 0xff0000 );
+        }
+        prv_active = curr_active;
+
+        if(curr_active && curr_active.type == "Mesh"){
+            info.style.visibility = "visible";
+            var x = curr_active.position.x;
+            var y = curr_active.position.y;
+            var z = curr_active.position.z;
+            info.textContent = `Room Number: ${curr_active.userData.room['room_no']}\nRoom Location: ${x},${y},${z}\n`;
+        }
+        else {
+            info.style.visibility = "hidden";
+            info.textContent = ``;
         }
     });
+    
+    canvas.onclick = function () {
+        if (curr_active != undefined && curr_active.type == "Mesh") {
+            popup.style.visibility = "visible";
+        }
+    };
 
 	function animate() {
 		requestAnimationFrame( animate );
@@ -224,3 +171,24 @@ function main(){
 }
 
 window.onload = main;
+
+function hide_box() {
+    popup.style.visibility = "hidden";
+}
+
+function add_preference() {
+    $.ajax({
+        url: "http://localhost:8000/api/add_preference/1/",
+        method: "POST",
+        success: function(resp) {
+            console.log(resp);
+        },
+        error: function(a, b, c) {
+            console.log(c);
+        }
+    });
+}
+
+function remove_preference() {
+
+}
