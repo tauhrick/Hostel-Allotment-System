@@ -124,40 +124,44 @@ function main(){
         mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
         if (flag == 0) {
-            var raycaster = new THREE.Raycaster();
-
-            raycaster.setFromCamera( mouse, camera );
-
-            var intersects = raycaster.intersectObjects( scene.children );
-            if (intersects.length == 0) {
-                curr_active = undefined;
-            } else {
-                curr_active = intersects[ 0 ].object;
-            }
-
-            if (prv_active && prv_active.type == "Mesh") {
-                prv_active.material.color = new THREE.Color( 0x050490 );
-            }
-            
-            if (curr_active && curr_active.type == "Mesh") {
-                curr_active.material.color = new THREE.Color( 0xff0000 );
-            }
-            prv_active = curr_active;
-
-            if(curr_active && curr_active.type == "Mesh"){
-                info.style.visibility = "visible";
-                var x = curr_active.position.x;
-                var y = curr_active.position.y;
-                var z = curr_active.position.z;
-                info.textContent = `Room Number: ${curr_active.userData.room['room_no']}\nRoom Location: ${x},${y},${z}\n`;
-            }
-            else {
-                info.style.visibility = "hidden";
-                info.textContent = ``;
-            }
+            display();
         }
     });
     
+    function display() {
+        var raycaster = new THREE.Raycaster();
+
+        raycaster.setFromCamera(mouse, camera);
+
+        var intersects = raycaster.intersectObjects(scene.children);
+        if (intersects.length == 0) {
+            curr_active = undefined;
+        } else {
+            curr_active = intersects[0].object;
+        }
+
+        if (prv_active && prv_active.type == "Mesh") {
+            prv_active.material.color = new THREE.Color(0x050490);
+        }
+
+        if (curr_active && curr_active.type == "Mesh") {
+            curr_active.material.color = new THREE.Color(0xff0000);
+        }
+        prv_active = curr_active;
+
+        if (curr_active && curr_active.type == "Mesh") {
+            info.style.visibility = "visible";
+            var x = curr_active.position.x;
+            var y = curr_active.position.y;
+            var z = curr_active.position.z;
+            info.textContent = `Room Number: ${curr_active.userData.room['room_no']}\nRoom Location: ${x},${y},${z}\n`;
+        }
+        else {
+            info.style.visibility = "hidden";
+            info.textContent = ``;
+        }
+    }
+
     flag = 0;
     locked_room = undefined;
 
