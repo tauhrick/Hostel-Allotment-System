@@ -123,27 +123,33 @@ function main(){
         mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
+        if (flag == 0) {
+            display();
+        }
+    });
+    
+    function display() {
         var raycaster = new THREE.Raycaster();
 
-        raycaster.setFromCamera( mouse, camera );
+        raycaster.setFromCamera(mouse, camera);
 
-        var intersects = raycaster.intersectObjects( scene.children );
+        var intersects = raycaster.intersectObjects(scene.children);
         if (intersects.length == 0) {
             curr_active = undefined;
         } else {
-            curr_active = intersects[ 0 ].object;
+            curr_active = intersects[0].object;
         }
 
         if (prv_active && prv_active.type == "Mesh") {
-            prv_active.material.color = new THREE.Color( 0x050490 );
+            prv_active.material.color = new THREE.Color(0x050490);
         }
-        
+
         if (curr_active && curr_active.type == "Mesh") {
-            curr_active.material.color = new THREE.Color( 0xff0000 );
+            curr_active.material.color = new THREE.Color(0xff0000);
         }
         prv_active = curr_active;
 
-        if(curr_active && curr_active.type == "Mesh"){
+        if (curr_active && curr_active.type == "Mesh") {
             info.style.visibility = "visible";
             var x = curr_active.position.x;
             var y = curr_active.position.y;
@@ -154,11 +160,23 @@ function main(){
             info.style.visibility = "hidden";
             info.textContent = ``;
         }
-    });
-    
+    }
+
+    flag = 0;
+    locked_room = undefined;
+
     canvas.onclick = function () {
         if (curr_active != undefined && curr_active.type == "Mesh") {
             popup.style.visibility = "visible";
+            // lock 
+            flag ^= 1;
+            console.log(flag);
+            if (flag) {
+                locked_room = curr_active;
+            } else {
+                locked_room = undefined;
+                hide_box();
+            }
         }
     };
 
