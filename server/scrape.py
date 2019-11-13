@@ -1,6 +1,4 @@
 from selenium import webdriver
-import pandas as pd
-import numpy as np
 import seaborn as sns
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
