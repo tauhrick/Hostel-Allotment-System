@@ -1,3 +1,5 @@
+var room_cubes = {};
+
 function main(){
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -60,7 +62,11 @@ function main(){
                 mesh.position.set(...room);
                 mesh.userData.room = resp[i];
                 cube.userData.room = resp[i];
-
+                console.log(cube.userData.room);
+                if (cube.userData.room.is_allocated) {
+                    cube.material.color = new THREE.Color(0xff0000);
+                }
+                room_cubes[cube.userData.room.room_no] = cube;
                 scene.add( cube );
                 scene.add( mesh );
             }
@@ -119,7 +125,7 @@ function main(){
 
     document.addEventListener("mousemove", (e) => {
         // normalized device coordinates
-        var mouse = {};
+        mouse = {};
         mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
@@ -141,11 +147,15 @@ function main(){
         }
 
         if (prv_active && prv_active.type == "Mesh") {
-            prv_active.material.color = new THREE.Color(0x050490);
+            if (prv_active.userData.room.is_allocated) {
+                prv_active.material.color = new THREE.Color(0xff0000);
+            } else {
+                prv_active.material.color = new THREE.Color(0x050490);
+            }
         }
 
         if (curr_active && curr_active.type == "Mesh") {
-            curr_active.material.color = new THREE.Color(0xff0000);
+            curr_active.material.color = new THREE.Color(0xffff00);
         }
         prv_active = curr_active;
 
@@ -170,7 +180,7 @@ function main(){
             popup.style.visibility = "visible";
             // lock 
             flag ^= 1;
-            console.log(flag);
+            // console.log(flag);
             if (flag) {
                 locked_room = curr_active;
             } else {
@@ -181,7 +191,8 @@ function main(){
     };
 
 	function animate() {
-		requestAnimationFrame( animate );
+        requestAnimationFrame( animate );
+        
 		renderer.render( scene, camera );
 	}
 
@@ -195,8 +206,11 @@ function hide_box() {
 }
 
 function add_preference() {
+    var room_no = curr_active.userData.room['room_no'];
+    console.log(room_no);
+    
     $.ajax({
-        url: "http://localhost:8000/api/add_preference/1/",
+        url: `http://localhost:8000/api/add_preference/${curr_active.userData.room['room_no']}/`,
         method: "POST",
         success: function(resp) {
             console.log(resp);
@@ -208,5 +222,61 @@ function add_preference() {
 }
 
 function remove_preference() {
+    var room_no = curr_active.userData.room['room_no'];
+    console.log(room_no);
 
+    $.ajax({
+        url: `http://localhost:8000/api/remove_preference/${curr_active.userData.room['room_no']}/`,
+        method: "POST",
+        success: function (resp) {
+            console.log(resp);
+        },
+        error: function (a, b, c) {
+            console.log(c);
+        }
+    });
+}
+
+function show_pref() {
+    var order = document.querySelector("#order");
+    var orderlist = document.querySelector("#orderlist");
+    $.ajax({
+        url: `http://localhost:8000/api/get_user_info/`,
+        method: "GET",
+        success: function (resp) {
+            orderlist.innerHTML = "";
+            for (var room of resp["preferences"]) {
+                orderlist.innerHTML += `<li>Room : ${room.room_no}</li>`
+                room_cubes[room.room_no].material.color = new THREE.Color(0x00ff00);
+            }
+        },
+        error: function (a, b, c) {
+            console.log(c);
+        }
+    })
+    order.style.visibility = "visible";
+    console.log("abcd");
+}
+
+setInterval(() => {
+    $.ajax({
+        url: `http://localhost:8000/api/get_user_info/`,
+        method: "GET",
+        success: function (resp) {
+            orderlist.innerHTML = "";
+            for (var room of resp["preferences"]) {
+                room_cubes[room.room_no].material.color = new THREE.Color(0x00ff00);
+            }
+        },
+        error: function (a, b, c) {
+            console.log(c);
+        }
+    })
+}, 100);
+
+
+function close_pref() {
+    order = document.querySelector("#order");
+    order.style.visibility = "hidden";
+    console.log("abcd");
 }

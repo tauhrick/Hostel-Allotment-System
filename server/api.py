@@ -43,7 +43,7 @@ def add_preference(room_no):
     return "OK added"
 
 
-@app.route("/api/remove_preference/<int:room_no>/")
+@app.route("/api/remove_preference/<int:room_no>/", methods = ["POST"])
 def remove_preference(room_no):
     choice = Choice.query.filter_by(
         team_id = session["team_id"],
@@ -58,4 +58,10 @@ def remove_preference(room_no):
 # 
 @app.route("/api/get_user_info/")
 def get_user_info():
-    return jsonify(dict(session))
+    user_info = dict(session)
+    user_info['preferences'] = Choice.query.filter_by(
+        team_id = session["team_id"],
+    ).all()
+    j = json.dumps(user_info, cls = AlchemyEncoder)
+    j = json.loads(j)
+    return jsonify(j)
