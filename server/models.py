@@ -52,7 +52,7 @@ class Round(db.Model):
 
 class Choice(db.Model):
     __tablename__ = "choices"
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     team_id = db.Column(db.Integer, db.ForeignKey("teams.id"))
     choice_no = db.Column(db.Integer)
     room_no = db.Column(db.Integer, db.ForeignKey("rooms.room_no"))
