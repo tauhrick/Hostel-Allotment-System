@@ -1,5 +1,6 @@
 from server import db
 from server.models import *
+import requests
 
 ss = db.session
 
@@ -67,7 +68,6 @@ def add_rooms():
 	    [3, 6, 2],
 	    [3, 7, 2],
 	    [3, 8, 2],
-
 	    [4, 1, 3],
 	    [5, 1, 3],
 	    [6, 1, 3],
@@ -102,8 +102,36 @@ def add_rooms():
 		ss.commit()
 
 
+def add_students():
+	URL = 'http://localhost:8000/register_student/'
+	students = [
+		('17501', '17548', '17534', '123'),
+		('17542', '17514', '17524', '123'),
+		('17531', '17505', '17540', '123'),
+	]
+	for s in students:
+		payload = {
+			'roll_number_1': s[0],
+			'roll_number_2': s[1],
+			'roll_number_3': s[2],
+			'phone_number_1': s[0],
+			'phone_number_2': s[1],
+			'phone_number_3': s[2],
+			'password': s[3]
+		}
+		r = requests.post(URL, data=payload)
+		print(f"Students ({s})  added")
+
+
 def main():
-	add_rooms()
+	try:
+		add_rooms()
+	except ConnectionRefusedError:
+		print("Server not running")
+		pass
+	except:
+		pass
+	add_students()
 
 
 if __name__ == "__main__":

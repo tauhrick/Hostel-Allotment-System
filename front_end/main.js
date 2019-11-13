@@ -1,5 +1,7 @@
 var room_cubes = {};
 
+var col_allocated_logged_user = 0xff69b4;
+
 function main(){
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -62,7 +64,6 @@ function main(){
                 mesh.position.set(...room);
                 mesh.userData.room = resp[i];
                 cube.userData.room = resp[i];
-                console.log(cube.userData.room);
                 if (cube.userData.room.is_allocated) {
                     cube.material.color = new THREE.Color(0xff0000);
                 }
@@ -196,7 +197,10 @@ function main(){
 		renderer.render( scene, camera );
 	}
 
+    console.log(room_cubes);
+
 	animate();
+
 }
 
 window.onload = main;
@@ -246,8 +250,12 @@ function show_pref() {
         success: function (resp) {
             orderlist.innerHTML = "";
             for (var room of resp["preferences"]) {
-                orderlist.innerHTML += `<li>Room : ${room.room_no}</li>`
-                room_cubes[room.room_no].material.color = new THREE.Color(0x00ff00);
+                orderlist.innerHTML += `<li>Room : ${room.room_no}</li>`;
+                if (room_cubes[room.room_no].userData.room.is_allocated) {
+                    room_cubes[room.room_no].material.color = new THREE.Color(0xff0000);
+                } else {
+                    room_cubes[room.room_no].material.color = new THREE.Color(0x00ff00);
+                }
             }
         },
         error: function (a, b, c) {
@@ -255,7 +263,6 @@ function show_pref() {
         }
     })
     order.style.visibility = "visible";
-    console.log("abcd");
 }
 
 setInterval(() => {
@@ -264,8 +271,18 @@ setInterval(() => {
         method: "GET",
         success: function (resp) {
             orderlist.innerHTML = "";
+            if (resp["room_allocated"] != -1) {
+                room_cubes[resp["room_allocated"]].material.color = new THREE.Color(col_allocated_logged_user);
+            }
             for (var room of resp["preferences"]) {
-                room_cubes[room.room_no].material.color = new THREE.Color(0x00ff00);
+                orderlist.innerHTML += `<li>Room : ${room.room_no}</li>`;
+                if (room.room_no == resp["room_allocated"]) {
+                    continue;
+                } else if (room_cubes[room.room_no].userData.room.is_allocated) {
+                    room_cubes[room.room_no].material.color = new THREE.Color(0xff0000);
+                } else {
+                    room_cubes[room.room_no].material.color = new THREE.Color(0x00ff00);
+                }
             }
         },
         error: function (a, b, c) {

@@ -62,6 +62,10 @@ def get_user_info():
     user_info['preferences'] = Choice.query.filter_by(
         team_id = session["team_id"],
     ).all()
+    room_allocated = Team.query.filter_by(
+        id = session["team_id"]
+    ).first()
+    user_info['room_allocated'] = room_allocated.room_allocated
     j = json.dumps(user_info, cls = AlchemyEncoder)
     j = json.loads(j)
     return jsonify(j)
