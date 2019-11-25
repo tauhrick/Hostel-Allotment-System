@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Room Allotment</title>
+        <script src = "three.min.js"></script>
+        <script src = "OrbitControls.js"></script>
+        <script src="jquery-3.4.1.min.js"></script>
+        <script src = "main.js"></script>
+    <link rel = "stylesheet" href = "main.css"/>
+    </head>
+    <body>
+        <div style="position: absolute;color: white;left: 50%;transform: translate(-50%, 0%); font-family: Arial, Helvetica, sans-serif;">
+            <h1>NEELKANTH BOYS HOSTEL</h1>
+        </div>
+        <div id="info">
+        </div>
+        <div id="popup">
+            ROOM INFO:
+            <input type="button" value="Add preference" onclick="add_preference()">
+            <input type="button" value="Remove preference" onclick="remove_preference()">
+            <!-- <input type="button" value="Close" onclick="hide_box()"> -->
+        </div>
+        <div id="order">
+            <ol id="orderlist">                
+            </ol>
+            <a href="#" onclick="close_pref()">close Preference List</a>
+
+        </div>
+        <a href="#" onclick = "show_pref()" style="position: absolute; right: 20px; bottom: 20px; color: white;">Show Preference List</a>
+    </body>
+</html>

@@ -2,3 +2,4 @@ venv/
 server/__pycache__/
 instance/
 *.pyc
+.vscode/
